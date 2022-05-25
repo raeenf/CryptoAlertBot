@@ -1,3 +1,4 @@
+from multiprocessing.connection import wait
 from tokenize import String
 import requests
 import urllib.request
@@ -5,7 +6,7 @@ import keys
 import pandas as pd
 from time import sleep
 
-
+#gets data of all 3 cryptos and returns it as a dataframe
 def get_crypto(currency = 'USD', cryp = 'BTC,ETH,XRP'):
 
     url = 'https://api.nomics.com/v1/currencies/ticker'
@@ -27,4 +28,17 @@ def get_crypto(currency = 'USD', cryp = 'BTC,ETH,XRP'):
     
     return df
 
-print(get_crypto())
+
+def alert(df, crypto, price_alert):
+    curr_value = df[df['assets'] == crypto]['rates'].item()
+
+    if float(curr_value) >= price_alert:
+        print(f"{crypto} has reached {price_alert}!!!")
+    else:
+        print(df[df['assets'] == crypto])
+    
+    
+
+while True:
+    alert(get_crypto(), 'BTC', 29820)
+    sleep(30)
