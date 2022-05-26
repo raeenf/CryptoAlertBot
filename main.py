@@ -5,6 +5,7 @@ import urllib.request
 import keys
 import pandas as pd
 from time import sleep
+import requests
 
 #gets data of all 3 cryptos and returns it as a dataframe
 def get_crypto(currency = 'USD', cryp = 'BTC,ETH,XRP'):
@@ -33,12 +34,16 @@ def alert(df, crypto, price_alert):
     curr_value = df[df['assets'] == crypto]['rates'].item()
 
     if float(curr_value) >= price_alert:
-        print(f"{crypto} has reached {price_alert}!!!")
+        resp = requests.post('https://textbelt.com/text', {
+        'phone': '0123456789',
+        'message': f"{crypto} has reached {price_alert}!!!",
+        'key': keys.TEXTBELT_KEY,
+        })
+        print(resp.json())
+        return True
     else:
         print(df[df['assets'] == crypto])
-    
-    
+        return False
 
-while True:
-    alert(get_crypto(), 'BTC', 29820)
+while not alert(get_crypto(), 'BTC', 29700):
     sleep(30)
