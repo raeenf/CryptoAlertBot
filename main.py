@@ -5,7 +5,7 @@ import urllib.request
 import keys
 import pandas as pd
 from time import sleep
-import requests
+
 
 #gets data of all 3 cryptos and returns it as a dataframe
 def get_crypto(currency = 'USD', cryp = 'BTC,ETH,XRP'):
