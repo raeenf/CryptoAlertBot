@@ -30,12 +30,12 @@ def get_crypto(currency = 'USD', cryp = 'BTC,ETH,XRP'):
     return df
 
 
-def alert(df, crypto, price_alert):
+def alert(df, crypto, price_alert, phone):
     curr_value = df[df['assets'] == crypto]['rates'].item()
 
-    if float(curr_value) >= price_alert:
+    if float(curr_value) >= int(price_alert):
         resp = requests.post('https://textbelt.com/text', {
-        'phone': '0123456789',
+        'phone': phone,
         'message': f"{crypto} has reached {price_alert}!!!",
         'key': keys.TEXTBELT_KEY,
         })
@@ -45,5 +45,11 @@ def alert(df, crypto, price_alert):
         print(df[df['assets'] == crypto])
         return False
 
-while not alert(get_crypto(), 'BTC', 29700):
+
+crypto = input("What Crypto are we looking for? ")
+price_alert = input("What price should we alert you at? ")
+phone = input("What is your phone number? ")
+
+
+while not alert(get_crypto(), crypto, price_alert, phone):
     sleep(30)
